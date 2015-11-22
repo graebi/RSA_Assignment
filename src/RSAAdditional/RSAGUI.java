@@ -18,6 +18,7 @@ public class RSAGUI extends javax.swing.JFrame {
     int e =1;//e coprime to m variable
     
     int phi =0;//m = phi (p-1) * (q-1)
+    int n = 0;
     
     // d
     int d=0;
@@ -25,7 +26,10 @@ public class RSAGUI extends javax.swing.JFrame {
     int PublicKeyN, PublicKeyE, PrivateKeyN, PrivateKeyD;
     //Prime number variable
     int primeNR1, primeNR2;
+    
+    String plaintext, decryption;
 
+    BigInteger message, ciphertext, Bn, Be, Bd, deciphertext;
     
     /**
      * Creates new form RSAGUI
@@ -56,6 +60,14 @@ public class RSAGUI extends javax.swing.JFrame {
         createPrivateKeyButton1 = new javax.swing.JButton();
         jLabelPrivateKeyD = new javax.swing.JLabel();
         jLabelPrivateKeyN = new javax.swing.JLabel();
+        jTextFieldMessageToEncrypte = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        btnToEncrypte = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldMessageEncrypted = new javax.swing.JTextField();
+        btnToDecrypt = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldMessageDecrypted = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("RSA Assignment");
@@ -111,6 +123,38 @@ public class RSAGUI extends javax.swing.JFrame {
 
         jLabelPrivateKeyN.setText("N: ");
 
+        jTextFieldMessageToEncrypte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldMessageToEncrypteActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Enter message to encrypt:");
+
+        btnToEncrypte.setText("Encrypt");
+        btnToEncrypte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnToEncrypteActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Encrypted message:");
+
+        jTextFieldMessageEncrypted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldMessageEncryptedActionPerformed(evt);
+            }
+        });
+
+        btnToDecrypt.setText("Decrypt");
+        btnToDecrypt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnToDecryptActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Decrypted message:");
+
         javax.swing.GroupLayout jPanelPrimeLayout = new javax.swing.GroupLayout(jPanelPrime);
         jPanelPrime.setLayout(jPanelPrimeLayout);
         jPanelPrimeLayout.setHorizontalGroup(
@@ -118,6 +162,11 @@ public class RSAGUI extends javax.swing.JFrame {
             .addGroup(jPanelPrimeLayout.createSequentialGroup()
                 .addGap(76, 76, 76)
                 .addGroup(jPanelPrimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(btnToDecrypt)
+                    .addComponent(jLabel2)
+                    .addComponent(btnToEncrypte)
+                    .addComponent(jLabel1)
                     .addGroup(jPanelPrimeLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addGroup(jPanelPrimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,7 +195,11 @@ public class RSAGUI extends javax.swing.JFrame {
                                     .addComponent(privateKeyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanelPrimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                         .addComponent(jLabelPrivateKeyN, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-                                        .addComponent(jLabelPrivateKeyD, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))))
+                                        .addComponent(jLabelPrivateKeyD, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                    .addGroup(jPanelPrimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jTextFieldMessageDecrypted, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+                        .addComponent(jTextFieldMessageEncrypted, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextFieldMessageToEncrypte, javax.swing.GroupLayout.Alignment.LEADING)))
                 .addGap(126, 126, 126))
         );
         jPanelPrimeLayout.setVerticalGroup(
@@ -176,7 +229,23 @@ public class RSAGUI extends javax.swing.JFrame {
                 .addGroup(jPanelPrimeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelPublicKeyN)
                     .addComponent(jLabelPrivateKeyN))
-                .addContainerGap(210, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldMessageToEncrypte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addComponent(btnToEncrypte)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldMessageEncrypted, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnToDecrypt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTextFieldMessageDecrypted, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -190,10 +259,10 @@ public class RSAGUI extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(28, Short.MAX_VALUE)
                 .addComponent(jPanelPrime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -231,7 +300,8 @@ public class RSAGUI extends javax.swing.JFrame {
       //  this.privateKeyLabel.setText(""+number2);//delete this is a test
         
         //2)Calculate n = pq
-        int n = number1 * number2;
+        n = number1 * number2;
+        
         
         //3)Pick another number e such that e and (p-1)(q-1) are relatively prime.
         int m = (number1 - 1)* (number2 - 1);
@@ -272,6 +342,32 @@ public class RSAGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_createPrivateKeyButton1createPublicKeyButtonActionPerformed
 
+    private void btnToEncrypteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToEncrypteActionPerformed
+        Be = BigInteger.valueOf(e);
+        Bn = BigInteger.valueOf(n);
+        plaintext = jTextFieldMessageToEncrypte.getText();
+        message = new BigInteger(plaintext.getBytes());              
+        ciphertext = message.modPow(Be, Bn);
+        this.jTextFieldMessageEncrypted.setText(ciphertext.toString());
+    }//GEN-LAST:event_btnToEncrypteActionPerformed
+
+    private void jTextFieldMessageToEncrypteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldMessageToEncrypteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldMessageToEncrypteActionPerformed
+
+    private void jTextFieldMessageEncryptedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldMessageEncryptedActionPerformed
+         
+    }//GEN-LAST:event_jTextFieldMessageEncryptedActionPerformed
+
+    private void btnToDecryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToDecryptActionPerformed
+        Bd = BigInteger.valueOf(d);
+        deciphertext = ciphertext.modPow(Bd,Bn);               
+        decryption = new String (deciphertext.toByteArray());                  
+        this.jTextFieldMessageDecrypted.setText(decryption);
+        
+        
+    }//GEN-LAST:event_btnToDecryptActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -311,13 +407,21 @@ public class RSAGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnToDecrypt;
+    private javax.swing.JButton btnToEncrypte;
     private javax.swing.JButton createKeyButton;
     private javax.swing.JButton createPrivateKeyButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelPrivateKeyD;
     private javax.swing.JLabel jLabelPrivateKeyN;
     private javax.swing.JLabel jLabelPublicKeyE;
     private javax.swing.JLabel jLabelPublicKeyN;
     private javax.swing.JPanel jPanelPrime;
+    private javax.swing.JTextField jTextFieldMessageDecrypted;
+    private javax.swing.JTextField jTextFieldMessageEncrypted;
+    private javax.swing.JTextField jTextFieldMessageToEncrypte;
     private javax.swing.JButton prime1Button;
     private javax.swing.JLabel prime1Label;
     private javax.swing.JButton prime2Button;
